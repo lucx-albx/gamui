@@ -21,12 +21,14 @@ First of all import the gamui module:
 1) from gamui import *
 
 Next if you want to create a Button with the gamui module first you have to create an instance of it:
+
 2) btn = Button(WINDOW, ...other parameters)
 
 After in the main loop you have to display on the screen the Button with the method:
+
 3) btn.display_button()
 
-# -- STEP FOR SEE THE DOCUMENTATION OF THE GAMUI MODULE -- #
+# STEP FOR SEE THE DOCUMENTATION OF THE GAMUI MODULE
 for more information about the gamui module on the terminal digit:
 1) python3
 2) import gamui
