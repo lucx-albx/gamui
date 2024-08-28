@@ -1,5 +1,6 @@
 import pygame
 from .gamui_exception import *
+from .gamui_functions import *
 import time
 import threading
 
@@ -9,7 +10,7 @@ class Button():
     !<>---| Button class arguments |---<>
     The class Button as 20 arguments:
 
-    !1) screen
+    !1) screen : pygame.surface
     It's the variable that the user must pass to the constructor for 
     display the button on the screen.
     
@@ -17,7 +18,7 @@ class Button():
     It's used for place the button on the axies x.
     
     !3) y : int
-    It's used for place the button on the axies x.
+    It's used for place the button on the axies y.
     
     !4) height : int
     It's used for specify the height of the button.
@@ -41,10 +42,10 @@ class Button():
     !9) fontsize : int
     It's used for specify the size of the text button.
     
-    !10) backgroundcolor : tuple
+    !10) backgroundcolor : tuple[int, int, int]
     It's used for specify the background color of the button.
     
-    !11) color : tuple
+    !11) color : tuple[int, int, int]
     It's used for specify the text color of the button.
     
     !12) justifycontent : string
@@ -75,7 +76,7 @@ class Button():
     !19) border_width : int | None
     Used for make the border with custom width.
     
-    !20) border_color : tuple
+    !20) border_color : tuple[int, int, int]
     Used for put a color on the border.
     """
     
@@ -90,8 +91,8 @@ class Button():
                 bold : bool = False,
                 font_type : str | None = None,
                 font_size : int = 22,
-                background_color : tuple = (255, 0, 0),
-                color : tuple = (255, 255, 255),
+                background_color : tuple[int, int, int] = (255, 0, 0),
+                color : tuple[int, int, int] = (255, 255, 255),
                 justify_content : str = "",
                 align_items : str = "",
                 border_radius_top_left : int = 0,
@@ -100,7 +101,7 @@ class Button():
                 border_radius_bottom_right : int = 0,
                 border_radius : int | None = None,
                 border_width : int | None = None,
-                border_color : tuple = (0, 0, 0)
+                border_color : tuple[int, int, int] = (0, 0, 0)
                 ) -> None:
         #Methods used to set the value that are passed to the constructor
         self.set_screen(screen)
@@ -131,7 +132,7 @@ class Button():
         self.animation_y = False
 
         #Method used to create and display the button on the screen
-        self.display()
+        self.display_button()
     #! --- END CONSTRUCTOR --- !#
 
 
@@ -140,61 +141,161 @@ class Button():
         self.__screen = scr
 
     def set_pos_x(self, px : int) -> None:
-        self.__posx = px
+        if type(px) is int or type(px) is float:
+            if is_negative_number(px) == False:
+                self.__posx = px
+            else:
+                raise NegativeNumberError("The position on the axies x must be a positive number")
+        else:
+            raise TypeError("The position on the axies x must be an integer or float")
     
     def set_pos_y(self, py : int) -> None:
-        self.__posy = py
+        if type(py) is int or type(py) is float:
+            if is_negative_number(py) == False:
+                self.__posy = py
+            else:
+                raise NegativeNumberError("The position on the axies x must be a positive number")
+        else:
+            raise TypeError("The position on the axies y must be an integer or float")
 
     def set_height(self, h : int) -> None:
-        self.__height = h
+        if type(h) is int or type(h) is float:
+            if is_negative_number(h) == False:
+                self.__height = h
+            else:
+                raise NegativeNumberError("The height must be a positive number")
+        else:
+            raise TypeError("The height must be an integer or float")
     
     def set_width(self, w : int) -> None:
-        self.__width = w
+        if type(w) is int or type(w) is float:
+            if is_negative_number(w) == False:
+                self.__width = w
+            else:
+                raise NegativeNumberError("The width must be a positive number")
+        else:
+            raise TypeError("The width must be an integer or float")
     
     def set_text(self, t : str) -> None:
-        self.__text = t
+        if type(t) is str:
+            self.__text = t
+        else:
+            raise TypeError("The text must be a string")
 
     def set_bold(self, b : bool) -> None:
-        self.__bold = b
+        if type(b) is bool:
+            self.__bold = b
+        else:
+            raise TypeError("The boldness must be a boolean")
 
     def set_fonttype(self, ft : str | None) -> None:
-        self.__fonttype = ft
+        if type(ft) is str or ft is None:
+            self.__fonttype = ft
+        else:
+            raise TypeError("The font type must be a string or a None type")
 
     def set_fontsize(self, fs : int) -> None:
-        self.__fontsize = fs
+        if type(fs) is int or type(fs) is float:
+            if is_negative_number(fs) == False:
+                self.__fontsize = fs
+            else:
+                raise NegativeNumberError("The font size must be a positive number")
+        else:
+            raise TypeError("The font size must be an integer or float")
 
-    def set_backgroundcolor(self, bg : tuple) -> None:
-        self.__backgroundcolor = bg
+    def set_backgroundcolor(self, bg : tuple[int, int, int]) -> None:
+        if type(bg) is tuple:
+            self.__backgroundcolor = bg
+        else:
+            raise TypeError("The background color must be a tuple of 3 integers from 0 to 255")
     
-    def set_color(self, c : tuple) -> None:
-        self.__color = c
-
+    def set_color(self, c : tuple[int, int, int]) -> None:
+        if type(c) is tuple:
+            self.__color = c
+        else:
+            raise TypeError("The color must be a tuple of 3 integers from 0 to 255")
+        
     def set_justifycontent(self, jc : str) -> None:
-        self.__justifycontent = jc.lower()
+        if type(jc) is str:
+            ljc = jc.lower()
+
+            if ljc == "" or self.check_if_not_custom_pos(ljc) == True:
+                self.__justifycontent = ljc
+            else:
+                raise TypeError("The justify content parameter must be: an empty string, 'start', 'center' or 'end'")
+        else:
+            raise TypeError("The justify content parameter must be a string")
     
     def set_alignitems(self, ai : str) -> None:
-        self.__alignitems = ai.lower()
+        if type(ai) is str:
+            lai = ai.lower()
+
+            if lai == "" or self.check_if_not_custom_pos(lai) == True:
+                self.__alignitems = lai
+            else:
+                raise TypeError("The align items parameter must be: an empty string, 'start', 'center' or 'end'")
+        else:
+            raise TypeError("The align items parameter must be a string")
     
     def set_border_radius_top_left(self, brtp : int) -> None:
-        self.__border_radius_top_left = brtp
+        if type(brtp) is int or type(brtp) is float:
+            if is_negative_number(brtp) == False:
+                self.__border_radius_top_left = brtp
+            else:
+                raise NegativeNumberError("The border radius top left must be a positive number")
+        else:
+            raise TypeError("The border radius top left must be an integer or float")
     
     def set_border_radius_top_right(self, brtr : int) -> None:
-        self.__border_radius_top_right = brtr
+        if type(brtr) is int or type(brtr) is float:
+            if is_negative_number(brtr) == False:
+                self.__border_radius_top_right = brtr
+            else:
+                raise NegativeNumberError("The border radius top right must be a positive number")
+        else:
+            raise TypeError("The border radius top right must be an integer or float")
     
     def set_border_radius_bottom_left(self, brbl : int) -> None:
-        self.__border_radius_bottom_left = brbl
+        if type(brbl) is int or type(brbl) is float:
+            if is_negative_number(brbl) == False:
+                self.__border_radius_bottom_left = brbl
+            else:
+                raise NegativeNumberError("The border radius bottom left must be a positive number")
+        else:
+            raise TypeError("The border radius bottom left must be an integer or float")
     
     def set_border_radius_bottom_right(self, brbr : int) -> None:
-        self.__border_radius_bottom_right = brbr
+        if type(brbr) is int or type(brbr) is float:
+            if is_negative_number(brbr) == False:
+                self.__border_radius_bottom_right = brbr
+            else:
+                raise NegativeNumberError("The border radius bottom right must be a positive number")
+        else:
+            raise TypeError("The border radius bottom right must be an integer or float")
     
-    def set_border_radius(self, br : int) -> None:
-        self.__border_radius = br
+    def set_border_radius(self, br : int | None) -> None:
+        if type(br) is int or type(br) is float or br is None:
+            if is_negative_number(br) == False:
+                self.__border_radius = br
+            else:
+                raise NegativeNumberError("The border radius must be a positive number")
+        else:
+            raise TypeError("The border radius must be an integer, float or None type")
     
-    def set_border_width(self, bw : int) -> None:
-        self.__border_width = bw
+    def set_border_width(self, bw : int | None) -> None:
+        if type(bw) is int or type(bw) is float or bw is None:
+            if is_negative_number(bw) == False:
+                self.__border_width = bw
+            else:
+                raise NegativeNumberError("The border width must be a positive number")
+        else:
+            raise TypeError("The border width must be an integer, float or None type")
     
-    def set_border_color(self, bc : tuple) -> None:
-        self.__border_color = bc
+    def set_border_color(self, bc : tuple[int, int, int]) -> None:
+        if type(bc) is tuple:
+            self.__border_color = bc
+        else:
+            raise TypeError("The border color must be a tuple of 3 integers from 0 to 255")
     #! --- END SETTER --- !#
 
     
@@ -226,10 +327,10 @@ class Button():
     def get_fontsize(self) -> int:
         return self.__fontsize
 
-    def get_backgroundcolor(self) -> tuple:
+    def get_backgroundcolor(self) -> tuple[int, int, int]:
         return self.__backgroundcolor
 
-    def get_color(self) -> tuple:
+    def get_color(self) -> tuple[int, int, int]:
         return self.__color
 
     def get_justifycontent(self) -> str:
@@ -256,57 +357,12 @@ class Button():
     def get_border_width(self) -> int | None:
         return self.__border_width
     
-    def get_border_color(self) -> tuple:
+    def get_border_color(self) -> tuple[int, int, int]:
         return self.__border_color
     #! --- END GETTER --- !#
 
     
-    #! --- START PRIVATE METHOD --- !#
-    #Method used for checking if the not custom position is setted
-    def check_if_not_custom_pos(self, placing : str) -> bool:
-        position = ["start", "center", "end"]
-
-        if(placing not in position):
-            return False
-        else:
-            return True
-    
-    #Placing the items in the not custom position that the user want to display in the screen
-    def set_not_custom_position(self, item : str, axies : str) -> None:
-        SCREEN_WIDTH = self.get_screen().get_width()
-        SCREEN_HEIGHT = self.get_screen().get_height()
-        #After the plus if the conditions return true the coordinate gonna be calculated in base of the border
-        ITEM_WIDTH = self.get_width() + ((self.get_border_width() * 2) if self.___check_border_need() == True else 0)
-        ITEM_HEIGHT = self.get_height() + ((self.get_border_width() * 2) if self.___check_border_need() == True else 0)
-        pos_x = 0
-        pos_y = 0
-
-        #Setting the coordinate to the x axies
-        if(item == "start" and axies == "x"):
-            pos_x = 0
-            self.set_pos_x(pos_x)
-
-        if(item == "center" and axies == "x"):
-            pos_x = (SCREEN_WIDTH / 2) - (ITEM_WIDTH / 2)
-            self.set_pos_x(pos_x)
-        
-        if(item == "end" and axies == "x"):
-            pos_x = SCREEN_WIDTH - ITEM_WIDTH
-            self.set_pos_x(pos_x)
-        
-        #Setting the coordinate to the y axies
-        if(item == "start" and axies == "y"):
-            pos_y = 0
-            self.set_pos_y(pos_y)
-
-        if(item == "center" and axies == "y"):
-            pos_y = (SCREEN_HEIGHT / 2) - (ITEM_HEIGHT / 2)
-            self.set_pos_y(pos_y)
-        
-        if(item == "end" and axies == "y"):
-            pos_y = SCREEN_HEIGHT - ITEM_HEIGHT
-            self.set_pos_y(pos_y)
-    
+    #! --- START PRIVATE METHOD --- !#    
     #Method used for drawing the rectangle
     def ___draw_rectangle(self, rec : pygame.Rect, bg : tuple, mr : int = 0) -> None:
         try:
@@ -414,15 +470,84 @@ class Button():
 
     
     #! --- START PUBLIC METHOD --- !#
-    #Method used for see the font type installed on your machine
+    def check_if_not_custom_pos(self, placing : str) -> bool:
+        """
+        Method used for checking if the not custom position is setted.
+
+        The parameters that the method need are:
+        1) placing = 'start', 'center' or 'end'
+
+        The method is gonna return True if 'start', 'center' or 'end' are
+        setted and False if is passed an empty string or basically if the 
+        parameters justify_content or align_items are not setted
+        """
+        
+        position = ["start", "center", "end"]
+
+        if(placing not in position):
+            return False
+        else:
+            return True
+    
+    def set_not_custom_position(self, item : str, axies : str) -> None:
+        """
+        Method used for placing the items in a not custom position that the user want to display in the screen.
+
+        The parameters that the method need are:
+        1) item = 'start', 'center' or 'end'
+        2) axies = 'x' or 'y'
+
+        Basically the method gonna set on the axies x or y the correct number for place the object
+        on the start, center or end of the screen in base of the axies that has been passed to the
+        method
+        """
+        SCREEN_WIDTH = self.get_screen().get_width()
+        SCREEN_HEIGHT = self.get_screen().get_height()
+        #After the plus if the conditions return true the coordinate gonna be calculated in base of the border
+        ITEM_WIDTH = self.get_width() + ((self.get_border_width() * 2) if self.___check_border_need() == True else 0)
+        ITEM_HEIGHT = self.get_height() + ((self.get_border_width() * 2) if self.___check_border_need() == True else 0)
+        pos_x = 0
+        pos_y = 0
+
+        #Setting the coordinate to the x axies
+        if(item == "start" and axies == "x"):
+            pos_x = 0
+            self.set_pos_x(pos_x)
+
+        if(item == "center" and axies == "x"):
+            pos_x = (SCREEN_WIDTH / 2) - (ITEM_WIDTH / 2)
+            self.set_pos_x(pos_x)
+        
+        if(item == "end" and axies == "x"):
+            pos_x = SCREEN_WIDTH - ITEM_WIDTH
+            self.set_pos_x(pos_x)
+        
+        #Setting the coordinate to the y axies
+        if(item == "start" and axies == "y"):
+            pos_y = 0
+            self.set_pos_y(pos_y)
+
+        if(item == "center" and axies == "y"):
+            pos_y = (SCREEN_HEIGHT / 2) - (ITEM_HEIGHT / 2)
+            self.set_pos_y(pos_y)
+        
+        if(item == "end" and axies == "y"):
+            pos_y = SCREEN_HEIGHT - ITEM_HEIGHT
+            self.set_pos_y(pos_y)
+
     def my_font_type(self) -> None:
+        """
+        Method used for see the font type installed on your machine.
+        """
         system_fonts = pygame.font.get_fonts()
 
         for font in system_fonts:
             print("Font name: " + font)
     
-    #Method used for create the shape of the button
-    def display(self) -> None:
+    def display_button(self) -> None:
+        """
+        Method used for create the shape of the button and display it on the screen.
+        """
         #Checking if the items have a custom placing or no
         if(self.check_if_not_custom_pos(self.get_justifycontent()) == True):
             self.set_not_custom_position(self.get_justifycontent(), "x")
@@ -469,16 +594,20 @@ class Button():
         #Displaying the button
         self.get_screen().blit(self.text_surface, self.text_rectangle)
     
-    #Method used for checking if the button was cliccked
     def is_clicked(self, event : pygame.event) -> bool:
+        """
+        Method used for checking if the button was cliccked.
+        """
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rectangle.collidepoint(event.pos):
                 return True
             
         return False
     
-    #Method used for checking if the cursor is hover the button
     def is_hover(self) -> bool:
+        """
+        Method used for checking if the cursor of the mouse is hover the button.
+        """
         mouse_pos = pygame.mouse.get_pos()
 
         if self.rectangle.collidepoint(mouse_pos):
@@ -486,8 +615,20 @@ class Button():
         
         return False
 
-    #Method used for start the animation
     def start_animation(self, what_animate : str, time : float, max_reach : int, operation : str) -> None:
+        """
+        Method used for start an animation for animate the:
+        1) axies x
+        2) axies y
+        3) width
+        4) height
+
+        The parameters that the method need are:
+        1) what_animate = a string that has to be 'x', 'y', 'height' or 'width' (used for specify what we wanna animate of the object)
+        2) time = below or equal to 0.02 (in how may seconds the animation have to finish the animation)
+        3) max_reach = an integer (the final number that we wanna reach for the animation)
+        4) operation = a string that has to be '+' or '-' (if is set with the string '+' the animation gonna increase otherwise with the string '-' the animation gonna decrease)
+        """
         #Height animation
         if what_animate.lower() == "height" and not self.animation_height:
             if self.__error_check_animation(max_reach, operation, self.get_height()) == False:
@@ -592,7 +733,10 @@ class Image(Button):
 
     #! --- START SETTER --- !#
     def set_image(self, pth : str) -> None:
-        self.__image = pygame.image.load(pth)
+        if type(pth) is str:
+            self.__image = pygame.image.load(pth)
+        else:
+            raise TypeError("The image path parameter must be a string")
     #! --- END SETTER --- !#
 
 
@@ -603,8 +747,10 @@ class Image(Button):
 
 
     #! --- START PUBLIC METHOD --- !#
-    #Method used for display the image on the screen
     def display_image(self) -> None:
+        """
+        Method used for display the image on the screen.
+        """
         #Checking if the items have a custom placing or no
         if(super().check_if_not_custom_pos(super().get_justifycontent()) == True):
             super().set_not_custom_position(super().get_justifycontent(), "x")
@@ -631,8 +777,10 @@ class Image(Button):
         #Updating the screen for display the image
         pygame.display.update()
     
-    #Method used for detect collision on the image
     def get_collision_image(self, x : int, y : int) -> bool:
+        """
+        Method used for detect collision on the image.
+        """
         start_x, end_x = super().get_pos_x(), super().get_pos_x() + super().get_width()
         start_y, end_y = super().get_pos_y(), super().get_pos_y() + super().get_height()
 
@@ -641,8 +789,10 @@ class Image(Button):
         
         return False
     
-    #Method used for checking if the image was clicked
     def is_clicked(self, event : pygame.event) -> bool:
+        """
+        Method used for checking if the image was clicked.
+        """
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
 
@@ -651,8 +801,10 @@ class Image(Button):
             
         return False
     
-    #Method used for checking if the image is hover the button
     def is_hover(self) -> bool:
+        """
+        Method used for checking if the image is hover the button.
+        """
         mouse_pos = pygame.mouse.get_pos()
 
         if self.get_collision_image(mouse_pos[0], mouse_pos[1]):
