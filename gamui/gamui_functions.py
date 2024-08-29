@@ -1,6 +1,6 @@
 """
-This file it's used by the gamui.py module for the functions that had been developed for 
-implemets extra functionallity that are helpfull for the correct function and checkin method
+This file it's used by the gamui module for the functions that had been developed for 
+implemets extra functionallity that are helpfull for the correct function and checking method
 of the gamui module.
 """
 

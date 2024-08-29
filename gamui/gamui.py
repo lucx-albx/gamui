@@ -10,73 +10,74 @@ class Button():
     !<>---| Button class arguments |---<>
     The class Button as 20 arguments:
 
-    !1) screen : pygame.surface
+    
+    !1) screen : pygame.surface - [REQUIRED]
     It's the variable that the user must pass to the constructor for 
     display the button on the screen.
     
-    !2) x : int
+    !2) x : int - [DEFAULT VALUE]
     It's used for place the button on the axies x.
     
-    !3) y : int
+    !3) y : int - [DEFAULT VALUE]
     It's used for place the button on the axies y.
     
-    !4) height : int
+    !4) height : int - [DEFAULT VALUE]
     It's used for specify the height of the button.
     
-    !5) width : int
+    !5) width : int - [DEFAULT VALUE]
     It's used for specify the width of the button.
     
-    !6) text : str
+    !6) text : str - [DEFAULT VALUE]
     It's used for specify the text of the button.
     
-    !7) bold : bool
+    !7) bold : bool - [DEFAULT VALUE]
     It's used for specify the boldness of the text button.
     
-    !8) fonttype : str | None
+    !8) fonttype : str | None - [DEFAULT VALUE]
     It's used for specify the font type of the text button.
     The font type that you can use are the font that are downloaded 
     locally on your machine. 
     Use the method my_font_type() to see what font type you have 
     installed on your machine
     
-    !9) fontsize : int
+    !9) fontsize : int - [DEFAULT VALUE]
     It's used for specify the size of the text button.
     
-    !10) backgroundcolor : tuple[int, int, int]
+    !10) backgroundcolor : tuple[int, int, int] - [DEFAULT VALUE]
     It's used for specify the background color of the button.
     
-    !11) color : tuple[int, int, int]
+    !11) color : tuple[int, int, int] - [DEFAULT VALUE]
     It's used for specify the text color of the button.
     
-    !12) justifycontent : string
+    !12) justifycontent : string - [DEFAULT VALUE]
     In input recive a string that must be "start", "center" or "end".
     With justifycontent = "center" the item gonna be placed on the center
     of the screen on the x axies.
 
-    !13) alignitems : string
+    !13) alignitems : string - [DEFAULT VALUE]
     In input recive a string that must be "start", "center" or "end".
     With alignitems = "center" the item gonna be placed on the center
     of the screen on the y axies.
     
-    !14) border_radius_top_left : int
+    !14) border_radius_top_left : int - [DEFAULT VALUE]
     Used for make the border left top of the button radius.
     
-    !15) border_radius_top_right : int
+    !15) border_radius_top_right : int - [DEFAULT VALUE]
     Used for make the border right top of the button radius.
        
-    !16) border_radius_bottom_left : int
+    !16) border_radius_bottom_left : int - [DEFAULT VALUE]
     Used for make the border left bottom of the button radius.
     
-    !17) border_radius_bottom_right : int
+    !17) border_radius_bottom_right : int - [DEFAULT VALUE]
     Used for make the border right bottom of the button radius.
 
-    !18) border_radius : int | None
+    !18) border_radius : int | None - [DEFAULT VALUE]
     Used for make all the border of the button radius.
     
-    !19) border_width : int | None
+    !19) border_width : int | None - [DEFAULT VALUE]
     Used for make the border with custom width.
     
-    !20) border_color : tuple[int, int, int]
+    !20) border_color : tuple[int, int, int] - [DEFAULT VALUE]
     Used for put a color on the border.
     """
     
@@ -479,7 +480,7 @@ class Button():
 
         The method is gonna return True if 'start', 'center' or 'end' are
         setted and False if is passed an empty string or basically if the 
-        parameters justify_content or align_items are not setted
+        parameters justify_content or align_items are not setted.
         """
         
         position = ["start", "center", "end"]
@@ -499,7 +500,7 @@ class Button():
 
         Basically the method gonna set on the axies x or y the correct number for place the object
         on the start, center or end of the screen in base of the axies that has been passed to the
-        method
+        method.
         """
         SCREEN_WIDTH = self.get_screen().get_width()
         SCREEN_HEIGHT = self.get_screen().get_height()
@@ -625,7 +626,7 @@ class Button():
 
         The parameters that the method need are:
         1) what_animate = a string that has to be 'x', 'y', 'height' or 'width' (used for specify what we wanna animate of the object)
-        2) time = below or equal to 0.02 (in how may seconds the animation have to finish the animation)
+        2) time = below or equal to 0.02 (in how may seconds the animation have to finish)
         3) max_reach = an integer (the final number that we wanna reach for the animation)
         4) operation = a string that has to be '+' or '-' (if is set with the string '+' the animation gonna increase otherwise with the string '-' the animation gonna decrease)
         """
@@ -671,32 +672,32 @@ class Image(Button):
     !<>---| Image class arguments |---<>
     The class Image as 8 arguments:
 
-    !1) screen
+    !1) screen - [REQUIRED]
     It's the variable that the user must pass to the constructor for 
     display the image on the screen.
     
-    !2) path : string
+    !2) path : string - [REQUIRED]
     It's the path where you have the image that you want to display on the
     screen.
     
-    !3) x : int
+    !3) x : int - [DEFAULT VALUE]
     It's used for place the image on the axies x.
     
-    !4) y : int
+    !4) y : int - [DEFAULT VALUE]
     It's used for place the image on the axies y.
     
-    !5) height : int
+    !5) height : int - [DEFAULT VALUE]
     It's used for specify the height of the image.
     
-    !6) width : int
+    !6) width : int - [DEFAULT VALUE]
     It's used for specify the width of the image.
     
-    !7) justifycontent : string
+    !7) justifycontent : string - [DEFAULT VALUE]
     In input recive a string that must be "start", "center" or "end".
     With justifycontent = "center" the item gonna be placed on the center
     of the screen on the x axies.
     
-    !8) alignitems : string
+    !8) alignitems : string - [DEFAULT VALUE]
     In input recive a string that must be "start", "center" or "end".
     With alignitems = "center" the item gonna be placed on the center
     of the screen on the y axies.
@@ -803,7 +804,7 @@ class Image(Button):
     
     def is_hover(self) -> bool:
         """
-        Method used for checking if the image is hover the button.
+        Method used for checking if the mouse cursor is hover the image.
         """
         mouse_pos = pygame.mouse.get_pos()
 
